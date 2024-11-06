@@ -11,11 +11,26 @@ const transporter = nodemailer.createTransport({
 
 // Exportez une fonction handler pour Vercel
 module.exports = async (req, res) => {
+    // Autorise les requêtes provenant de l'origine http://localhost:3000
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+
+    // Autorise les méthodes HTTP utilisées par le frontend
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+
+    // Autorise certains en-têtes personnalisés si nécessaire
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Réponse pour la requête OPTIONS (pré-vol)
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
+    // Le code de votre fonction existante commence ici
     if (req.method === 'POST') {
         const { firstname, email, phone, date, location, me, message } = req.body;
 
         const mailOptions = {
-            from: email, // Utilisez l'e-mail du client
+            from: email, // Utilise l'email du client
             to: 'youlens.production@gmail.com', // Votre adresse e-mail
             subject: 'Nouveau message | Guillaume Court Wedding Films',
             text: `
@@ -33,7 +48,7 @@ module.exports = async (req, res) => {
             await transporter.sendMail(mailOptions);
             res.status(200).send('E-mail envoyé');
         } catch (error) {
-            console.error('Erreur d\'envoi de l\'e-mail:', error);
+            console.error("Erreur d'envoi de l'e-mail:", error);
             res.status(500).send('Erreur lors de l\'envoi de l\'e-mail');
         }
     } else {
