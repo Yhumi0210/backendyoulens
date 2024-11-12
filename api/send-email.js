@@ -11,8 +11,8 @@ const transporter = nodemailer.createTransport({
 
 // Exportez une fonction handler pour Vercel
 module.exports = async (req, res) => {
-    // Autorise les requêtes provenant de l'origine http://localhost:3000
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    // Autorise les requêtes provenant de l'origine https://youlens.fr
+    res.setHeader('Access-Control-Allow-Origin', 'https://youlens.fr');
 
     // Autorise les méthodes HTTP utilisées par le frontend
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
