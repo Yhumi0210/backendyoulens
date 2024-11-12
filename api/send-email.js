@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { validateEmailData } = require('./validator');
 
 // Configurez Nodemailer
 const transporter = nodemailer.createTransport({
@@ -28,6 +29,12 @@ module.exports = async (req, res) => {
     // Le code de votre fonction existante commence ici
     if (req.method === 'POST') {
         const { firstname, email, phone, date, location, me, message } = req.body;
+
+        // Validation des données
+        const errors = validateEmailData({ firstname, email, phone, date, location, me, message });
+        if (errors.length > 0) {
+            return res.status(400).json({ errors });
+        }
 
         const mailOptions = {
             from: email, // Utilise l'email du client
